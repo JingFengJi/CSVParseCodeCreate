@@ -1,0 +1,7 @@
+ID,name,time,type,price
+,,,,
+1,Skip 1 hour,1,1,0
+5,Cost 50% off,60,2,0
+2,Skip 1 day,24,1,25
+3,Skip 7 days,168,1,75
+4,Skip 14 days,336,1,125
