@@ -482,7 +482,7 @@ public class CreateCSVParseCode : EditorWindow
 	private string GetFileName(string path)
 	{
 		if(string.IsNullOrEmpty(path)) return string.Empty;
-		string name = path.Substring(path.LastIndexOf("/")+1);
+		string name = path.Substring(path.LastIndexOf("\\")+1);
 		name = name.Substring(0,name.IndexOf("."));
 		return name;
 	}
