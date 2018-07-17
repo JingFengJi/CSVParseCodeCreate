@@ -70,5 +70,8 @@ private void {0}()
 	public static string ModelDataFieldValuationFormat_Int = "temp.{0} = ConvertUtil.Str2Int(record.GetField(header));";
 	public static string ModelDataFieldValuationFormat_Double = "temp.{0} = ConvertUtil.Str2Double(record.GetField(header));";
 	public static string ModelDataFieldValuationFormat_Bool = "temp.{0} = ConvertUtil.Str2Int(record.GetField(header)) != 0;";
-	
+	public static string ModelDataFieldValuetionFormat_Color = @"Color c = Color.white;
+				string colorStr = record.GetField(header);
+				ColorUtility.TryParseHtmlString(colorStr,out c);
+				temp.{0} = c;";
 }

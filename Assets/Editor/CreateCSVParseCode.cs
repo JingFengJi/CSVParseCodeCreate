@@ -351,6 +351,9 @@ public class CreateCSVParseCode : EditorWindow
 						case DataType.Bool:
 							fieldParseCode = string.Format(CSVCodeConfig.ModelDataFieldValuationFormat_Bool,data[i].header);
 						break;
+						case DataType.Color:
+							fieldParseCode = string.Format(CSVCodeConfig.ModelDataFieldValuetionFormat_Color,data[i].header);
+						break;
 						default:
 							fieldParseCode = string.Format(CSVCodeConfig.ModelDataFieldValuationFormat_String,data[i].header);
 						break;
@@ -450,6 +453,10 @@ public class CreateCSVParseCode : EditorWindow
 						//TODO:
 						return DataType.String;
 					}
+					else if(CanParseToColor(str))
+					{
+						return DataType.Color;
+					}
 					return DataType.String;
 				}
 			}
@@ -486,6 +493,13 @@ public class CreateCSVParseCode : EditorWindow
 		name = name.Substring(0,name.IndexOf("."));
 		return name;
 	}
+
+	private bool CanParseToColor(string str)
+	{
+		if(string.IsNullOrEmpty(str)) return false;
+		if(str.StartsWith("#") && (str.Length == 7 || str.Length == 9)) return true;
+		return false;
+	}
 }
 
 public enum DataType
@@ -496,7 +510,7 @@ public enum DataType
 	Bool = 3,
 	//Vector3 = 4,
 	//Vector2 = 5,
-	//Color = 6,
+	Color = 6,
 }
 
 public class CsvData
