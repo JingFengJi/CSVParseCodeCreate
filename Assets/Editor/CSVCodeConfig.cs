@@ -17,7 +17,7 @@ public class {0}
 {1}
 }}";
 
-	public static string FieldFormat = "\tpubilc {0} {1} {{ set; get; }}";
+	public static string FieldFormat = "\tpublic {0} {1} {{ set; get; }}";
 
 	public static string ClassNameFormat = "{0}Model";
 
