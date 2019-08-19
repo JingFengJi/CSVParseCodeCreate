@@ -42,8 +42,7 @@ public List<{0}> {1}
 private void {0}()
 {{
 	{1} = new List<{2}>;
-	string path = DEFAULT_CSV_PATH + {3};
-	CSVTable csvTable = CsvLoader.LoadCSV(path);
+	CSVTable csvTable = CsvLoader.LoadCSV({3});
 	foreach (CSVRecord record in csvTable.Records)
 	{{
 		{4} temp = new {5}();

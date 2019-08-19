@@ -9,12 +9,6 @@ using Rotorz.ReorderableList;
 using System.Text;
 public class CreateCSVParseCode : EditorWindow 
 {
-	#region Const
-
-	private const string DEFAULT_CSV_PATH = "CsvData\\";
-
-	#endregion
-
 	private CSVLoader csvLoader;
 
 	private CSVLoader CsvLoader
@@ -275,8 +269,8 @@ public class CreateCSVParseCode : EditorWindow
 	private void SpeculativeParseCSV(string path)
 	{
 		//string path = DEFAULT_CSV_PATH + "guide";
-		string csvpath = DEFAULT_CSV_PATH + GetFilePath(path);
-		CSVTable csvTable = CsvLoader.LoadCSV(csvpath);
+//		string csvpath = DEFAULT_CSV_PATH + GetFilePath(path);
+		CSVTable csvTable = CsvLoader.LoadCSVAsset(path);
 		data.Clear();
 		if(csvTable != null)
 		{
@@ -315,6 +309,12 @@ public class CreateCSVParseCode : EditorWindow
 		if(string.IsNullOrEmpty(str)) return string.Empty;
 		return str.Substring(0, 1).ToUpper() + str.Substring(1);
 	}
+	
+	private string Lowercase(string str)
+	{
+		if(string.IsNullOrEmpty(str)) return string.Empty;
+		return str.Substring(0, 1).ToLower() + str.Substring(1);
+	}
 
 	private void CreateModelParseCode()
 	{
@@ -323,9 +323,10 @@ public class CreateCSVParseCode : EditorWindow
 			string className = string.Format(CSVCodeConfig.ClassNameFormat,curCSVFileName);
 			StringBuilder fields = new StringBuilder();
 			StringBuilder codeSb = new StringBuilder();
-			string filePath = GetFilePath(curCSVPath);
-			filePath = "\"" + filePath + "\"";
+			string fileLoadPath = GetFileLoadPath(curCSVPath);
+			fileLoadPath = "\"" + fileLoadPath + "\"";
 			string modelListStr = className + "List";
+			modelListStr = Lowercase(modelListStr);
 			string publicModelListStr = Uppercase(modelListStr);
 			string parseMethodNameStr = string.Format(CSVCodeConfig.parseMethodNameFormat,publicModelListStr); 
 			string parseMethodStr = string.Format(CSVCodeConfig.methodFormat,parseMethodNameStr);
@@ -371,7 +372,7 @@ public class CreateCSVParseCode : EditorWindow
 					isFirstField = false;
 				}
 			}
-			codeSb.AppendLine(string.Format(CSVCodeConfig.ModelDataParseMethodFormat,parseMethodNameStr,modelListStr,className,filePath,className,className,fields.ToString(),modelListStr));
+			codeSb.AppendLine(string.Format(CSVCodeConfig.ModelDataParseMethodFormat,parseMethodNameStr,modelListStr,className,fileLoadPath,className,className,fields.ToString(),modelListStr));
 			parseCSVCodeStr = codeSb.ToString();
 		}
 	}
@@ -478,10 +479,11 @@ public class CreateCSVParseCode : EditorWindow
 		return path.Substring(path.LastIndexOf("/")+1);
 	}
 
-	private string GetFilePath(string path)
+	//获取文件加载路径，基于Resources下的
+	private string GetFileLoadPath(string path)
 	{
 		if(string.IsNullOrEmpty(path)) return string.Empty;
-		string name = path.Substring(path.LastIndexOf("CsvData\\")+8);
+		string name = path.Substring(path.LastIndexOf("Resources") + 10);
 		name = name.Substring(0,name.IndexOf("."));
 		return name;
 	}
@@ -489,7 +491,7 @@ public class CreateCSVParseCode : EditorWindow
 	private string GetFileName(string path)
 	{
 		if(string.IsNullOrEmpty(path)) return string.Empty;
-		string name = path.Substring(path.LastIndexOf("\\")+1);
+		string name = path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar)+1);
 		name = name.Substring(0,name.IndexOf("."));
 		return name;
 	}

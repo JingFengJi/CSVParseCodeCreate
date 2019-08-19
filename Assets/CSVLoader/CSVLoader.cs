@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System;
-using System.IO;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 /*===============================================================*/
 /**
 * CSVを読み込むクラス
@@ -58,7 +60,15 @@ public class CSVLoader
 		return LoadCSVFromContent(csvTextAsset.text);
 	}
 
-
+	#if UNITY_EDITOR
+	public CSVTable LoadCSVAsset(string csvAssetPath)
+	{
+		TextAsset csvTextAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(csvAssetPath);
+		return LoadCSVFromContent(csvTextAsset.text);
+	}
+	#endif
+	
+	
 	private CSVTable LoadCSVFromContent(string csvContent)
 	{
 		// データテーブルクラスの生成.
