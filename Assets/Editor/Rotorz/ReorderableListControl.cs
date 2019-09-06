@@ -583,6 +583,7 @@ namespace Rotorz.ReorderableList {
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		private void PrepareState(int controlID, IReorderableListAdaptor adaptor) {
 			_controlID = controlID;
+			GUIHelper.InitVisibleRect();
 			_visibleRect = GUIHelper.VisibleRect();
 
 			if ((Flags & ReorderableListFlags.ShowIndices) != 0)

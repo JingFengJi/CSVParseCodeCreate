@@ -14,13 +14,9 @@ namespace Rotorz.ReorderableList.Internal {
 	/// <exclude/>
 	public static class GUIHelper {
 
-		static GUIHelper() {
-			var tyGUIClip = Type.GetType("UnityEngine.GUIClip,UnityEngine");
-			if (tyGUIClip != null) {
-				var piVisibleRect = tyGUIClip.GetProperty("visibleRect", BindingFlags.Static | BindingFlags.Public);
-				if (piVisibleRect != null)
-					VisibleRect = (Func<Rect>)Delegate.CreateDelegate(typeof(Func<Rect>), piVisibleRect.GetGetMethod());
-			}
+		static GUIHelper()
+		{
+			InitVisibleRect();
 
 			var miFocusTextInControl = typeof(EditorGUI).GetMethod("FocusTextInControl", BindingFlags.Static | BindingFlags.Public);
 			if (miFocusTextInControl == null)
@@ -31,12 +27,32 @@ namespace Rotorz.ReorderableList.Internal {
 			s_SeparatorColor = EditorGUIUtility.isProSkin
 				? new Color(0.11f, 0.11f, 0.11f)
 				: new Color(0.5f, 0.5f, 0.5f);
-
 			s_SeparatorStyle = new GUIStyle();
 			s_SeparatorStyle.normal.background = EditorGUIUtility.whiteTexture;
 			s_SeparatorStyle.stretchWidth = true;
 		}
 
+		public static void InitVisibleRect()
+		{
+			if (VisibleRect == null)
+			{
+				var tyGUIClip = Type.GetType("UnityEngine.GUIClip,UnityEngine");
+				if (tyGUIClip != null) {
+					var piVisibleRect = tyGUIClip.GetProperty("visibleRect", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+					if (piVisibleRect != null)
+					{
+						MethodInfo visibleRectGetMethodInfo = piVisibleRect.GetGetMethod();
+						if (visibleRectGetMethodInfo == null)
+						{
+							visibleRectGetMethodInfo = piVisibleRect.GetGetMethod(true);
+						}
+						VisibleRect =
+							(Func<Rect>) Delegate.CreateDelegate(typeof(Func<Rect>), visibleRectGetMethodInfo);
+					}
+				}
+			}
+		}
+		
 		/// <summary>
 		/// Gets visible rectangle within GUI.
 		/// </summary>
